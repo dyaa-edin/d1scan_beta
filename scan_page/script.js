@@ -201,11 +201,11 @@ function testAudioFingerprint() {
 }
 // 🖥️ اختبار اختراق التبويبات (Reverse Tabnabbing)
 function testReverseTabnabbing() {
-    let newTab = window.open("https://dyaa-edin.github.io/d1scan_beta#test", "_blank");
+    let newTab = window.open("hhttps://dyaa-edin.github.io/d1scan_beta/scan_page#test", "_blank");
     
     setTimeout(() => {
         if (newTab) {
-            newTab.location = "https://dyaa-edin.github.io/d1scan_beta#test";  // تغيير الصفحة إلى موقع خبيث
+            newTab.location = "https://dyaa-edin.github.io/d1scan_beta/scan_page#test";  // تغيير الصفحة إلى موقع خبيث
             updateStatus("tabnabbingResult", "⚠️ تم اختراق التبويب وإعادة توجيهه!", "danger");
         } else {
             updateStatus("tabnabbingResult", "❌ المتصفح منع فتح التبويب", "error");
